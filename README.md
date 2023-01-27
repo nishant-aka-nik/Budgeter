@@ -89,7 +89,7 @@ And lastly if you’d like to remove Cypress entirely, delete the entire `cypres
 npm uninstall -S cypress
 ```
 
-## Input and button example
+### Input and button example
 ```
 import { Input, Button } from '@nextui-org/react';
 import React, { useState } from 'react'

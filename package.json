@@ -8,6 +8,8 @@
     "export": "next export"
   },
   "dependencies": {
+    "@nextui-org/react": "^1.0.0-beta.12",
+    "async": "^3.2.4",
     "cypress": "^10.0.3",
     "next": "^12.3.4",
     "react": "^18.0.0",

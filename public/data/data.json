@@ -1,0 +1,12 @@
+{
+    "recurring": [
+      {
+        "name": "swiggy",
+        "amount": 100
+      },
+      {
+        "name": "swiggy",
+        "amount": 100
+      }
+    ]
+  }
