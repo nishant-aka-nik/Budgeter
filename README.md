@@ -88,3 +88,36 @@ And lastly if you’d like to remove Cypress entirely, delete the entire `cypres
 ```bash
 npm uninstall -S cypress
 ```
+
+### Input and button example
+```
+import { Input, Button } from '@nextui-org/react';
+import React, { useState } from 'react'
+
+export default function Recurring() {
+    const [data, setData] = useState("null")
+
+    const [print, setprint] = useState(false);
+
+
+    function getData(val) {
+        // console.warn(val.target.value)
+        setData(val.target.value)
+    }
+
+    function printData() {
+        setprint(data)
+    }
+
+
+    return (
+        <div>
+            <h1>     {
+                print
+            }</h1>
+            <Input Placeholder="Enter Data" onChange={getData} />
+            <Button onPress={printData}>Print data</Button>
+        </div>
+    )
+}
+```
