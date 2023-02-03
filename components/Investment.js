@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import * as Realm from "realm-web";
 
 
-export default function Recurring() {
+export default function Investment() {
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
             <Card css={{ mw: "400px" }}>
@@ -22,7 +22,7 @@ export default function Recurring() {
 function CardHeader() {
     return (
         <Card.Header>
-            <text>RECURRING EXPENSES</text>
+            <text>INVESTMENTS</text>
         </Card.Header>
     )
 }
@@ -44,9 +44,9 @@ function CardTable() {
 
     useEffect(async () => {
         const recData = await getRecData("nik")
-        console.log("myval", recData[0].Recurring_Expenses)
+        console.log("myval", recData[0].Investment)
 
-        let rowData = recData[0].Recurring_Expenses.map((value, index) => {
+        let rowData = recData[0].Investment.map((value, index) => {
             index = index + 1
             value["key"] = index
             return value
@@ -83,7 +83,7 @@ async function getRecData(username) {
     const credentials = Realm.Credentials.anonymous();
     try {
         const user = await app.logIn(credentials);
-        const allRecData = await user.functions.getRecurring(username);
+        const allRecData = await user.functions.getInvestments(username);
         console.log("all re data", allRecData)
         return allRecData
     } catch (err) {

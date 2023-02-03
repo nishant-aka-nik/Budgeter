@@ -1,5 +1,6 @@
 import { Card, Grid, Table, Text } from "@nextui-org/react";
 import Recurring from "./Recurring";
+import Investment from "./Investment";
 
 
 
@@ -7,6 +8,7 @@ export default function Body() {
     return (<div>
         {/* <Cards /> */}
         <Recurring/>
+        <Investment/>
     </div>)
 }
 
