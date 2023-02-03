@@ -1,4 +1,7 @@
 import { Card, Table } from "@nextui-org/react";
+import * as Realm from "realm-web"
+import { useEffect , useState} from "react";
+
 
 export default function Recurring() {
     return (
@@ -8,6 +11,8 @@ export default function Recurring() {
                     <CardHeader />
                     <Card.Divider></Card.Divider>
                     <CardTable></CardTable>
+                    <Card.Divider></Card.Divider>
+
                 </Card.Body>
             </Card>
         </ div>
@@ -34,17 +39,14 @@ function CardTable() {
             label: "AMOUNT",
         },
     ];
-    const rows = [
-        {
-            key: "1",
-            name: "Tony Reichert",
-            amt: 100,
-        }
-    ];
 
+    const [rows, setRows] = useState([]);
 
-    console.log("This is my x ---", getRows())
-
+    useEffect(async () => {
+        const recData = await getRecData("nik")
+        console.log("myval", recData[0])
+        setRows(recData[0].Recurring_Expenses)
+    }, []);
 
     return (
         <Table
@@ -70,9 +72,15 @@ function CardTable() {
     )
 }
 
-async function getRows() {
-    let res = await fetch('./data/data.json')
-    let json = await res.json();
-    console.log("my json data",json)
-    return json
+async function getRecData(username) {
+    const app = new Realm.App({ id: "budzgeter-gogly" });
+    const credentials = Realm.Credentials.anonymous();
+    try {
+        const user = await app.logIn(credentials);
+        const allRecData = await user.functions.getRecurring(username);
+        console.log("all re data", allRecData)
+        return allRecData
+    } catch (err) {
+        console.error("Failed to log in", err);
+    }
 }
