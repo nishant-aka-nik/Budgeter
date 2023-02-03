@@ -43,7 +43,7 @@ function CardTable() {
     const [rows, setRows] = useState([]);
 
     useEffect(async () => {
-        const recData = await getRecData("nik")
+        const recData = await getInvestmentData("nik")
         console.log("myval", recData[0].Investment)
 
         let rowData = recData[0].Investment.map((value, index) => {
@@ -78,7 +78,7 @@ function CardTable() {
     )
 }
 
-async function getRecData(username) {
+async function getInvestmentData(username) {
     const app = new Realm.App({ id: "budzgeter-gogly" });
     const credentials = Realm.Credentials.anonymous();
     try {
@@ -99,7 +99,7 @@ function CardFooter() {
             <Spacer y={0.5} />
             <Input size="xs" placeholder="Amount" />
             <Spacer y={0.5} />
-            <Button size="xs" aria-label="Add expense">Add Expense</Button>
+            <Button size="xs" aria-label="Add Investment">Add Expense</Button>
 
         </Card.Footer>
     )
