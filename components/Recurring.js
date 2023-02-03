@@ -11,8 +11,8 @@ export default function Recurring() {
                     <CardHeader />
                     <Card.Divider></Card.Divider>
                     <CardTable></CardTable>
-                    <Card.Divider></Card.Divider>
-                    <CardFooter></CardFooter>
+                    {/* <Card.Divider></Card.Divider> */}
+                    {/* <CardFooter></CardFooter> */}
                 </Card.Body>
             </Card>
         </ div>
@@ -41,6 +41,8 @@ function CardTable() {
     ];
 
     const [rows, setRows] = useState([]);
+    const [expName, setExpName] = useState("")
+    const [amt, setAmt] = useState(0)
 
     useEffect(async () => {
         const recData = await getRecData("nik")
@@ -54,27 +56,48 @@ function CardTable() {
         setRows(rowData)
     }, []);
 
+
+
+    function addRecord() {
+        const reqObj = {
+            username: "nik",
+            name: expName,
+            amt: amt
+        }
+        addRecToMongo(reqObj)
+        let newKey = rows[rows.length - 1].key + 1
+        setRows([...rows, { name: expName, amt: amt, key: newKey }])
+        return
+    }
+
     return (
-        <Table
-            aria-label="Example table with dynamic content"
-            css={{
-                height: "auto",
-                minWidth: "100%",
-            }}
-        >
-            <Table.Header columns={columns}>
-                {(column) => (
-                    <Table.Column key={column.key}>{column.label}</Table.Column>
-                )}
-            </Table.Header>
-            <Table.Body items={rows}>
-                {(item) => (
-                    <Table.Row key={item.key}>
-                        {(columnKey) => <Table.Cell>{item[columnKey]}</Table.Cell>}
-                    </Table.Row>
-                )}
-            </Table.Body>
-        </Table>
+        <>
+            <Table
+                aria-label="Example table with dynamic content"
+                css={{
+                    height: "auto",
+                    minWidth: "100%",
+                }}
+            >
+                <Table.Header columns={columns}>
+                    {(column) => (
+                        <Table.Column key={column.key}>{column.label}</Table.Column>
+                    )}
+                </Table.Header>
+                <Table.Body items={rows}>
+                    {(item) => (
+                        <Table.Row key={item.key}>
+                            {(columnKey) => <Table.Cell>{item[columnKey]}</Table.Cell>}
+                        </Table.Row>
+                    )}
+                </Table.Body>
+            </Table>
+            <Input aria-label="Expense Name" size="xs" placeholder="Expense Name" onChange={(e) => { setExpName(e.target.value) }} />
+            <Spacer y={0.5} />
+            <Input aria-label="amt" size="xs" placeholder="Amount" onChange={(e) => { setAmt(e.target.value) }} />
+            <Spacer y={0.5} />
+            <Button size="xs" aria-label="Add expense" onPress={addRecord}>Add Expense</Button>
+        </>
     )
 }
 
@@ -92,15 +115,49 @@ async function getRecData(username) {
 }
 
 
-function CardFooter() {
-    return (
-        <Card.Footer>
-            <Input size="xs" placeholder="Expense Name" />
-            <Spacer y={0.5} />
-            <Input size="xs" placeholder="Amount" />
-            <Spacer y={0.5} />
-            <Button size="xs" aria-label="Add expense">Add Expense</Button>
+// function CardFooter() {
+//     const [expName, setExpName] = useState("")
+//     const [amt, setAmt] = useState(0)
 
-        </Card.Footer>
-    )
+//     function addRecord() {
+//         console.log("Button Clicked", expName, ":::::", amt)
+
+//         const reqObj = {
+//             username: "nik",
+//             name: expName,
+//             amt: amt
+//         }
+//         addRecToMongo(reqObj)
+//         console.log(reqObj)
+
+//         return
+//     }
+
+//     return (
+//         <Card.Footer>
+//             <Input aria-label="Expense Name" size="xs" placeholder="Expense Name" onChange={(e) => { setExpName(e.target.value) }} />
+//             <Spacer y={0.5} />
+//             <Input aria-label="amt" size="xs" placeholder="Amount" onChange={(e) => { setAmt(e.target.value) }} />
+//             <Spacer y={0.5} />
+//             <Button size="xs" aria-label="Add expense" onPress={addRecord}>Add Expense</Button>
+
+//         </Card.Footer>
+//     )
+// }
+
+async function addRecToMongo(reqObj) {
+    const mongoUser = getMongoUser()
+    const res = await (await mongoUser).functions.addRecData(reqObj)
+    return
+}
+
+async function getMongoUser() {
+    const app = new Realm.App({ id: "budzgeter-gogly" });
+    const credentials = Realm.Credentials.anonymous();
+    try {
+        const mongoUser = await app.logIn(credentials);
+        return mongoUser
+    } catch (err) {
+        console.error("Failed to log in", err);
+    }
 }
